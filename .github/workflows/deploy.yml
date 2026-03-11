@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - claude/baja-race-logistics-site-ApqRo
 
 permissions:
   contents: read
