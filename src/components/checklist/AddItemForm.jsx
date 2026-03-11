@@ -1,4 +1,19 @@
 import { useState } from "react";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import Box from "@mui/material/Box";
 
 export default function AddItemForm({ members, onAdd, onCancel }) {
   const [label, setLabel] = useState("");
@@ -21,69 +36,53 @@ export default function AddItemForm({ members, onAdd, onCancel }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onCancel}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h2>Add Checklist Item</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Item Description</label>
-            <input
-              type="text"
-              value={label}
-              onChange={(e) => setLabel(e.target.value)}
-              placeholder="e.g. Extra protein bars"
-              autoFocus
-            />
-            {error && <span className="form-error">{error}</span>}
-          </div>
-          <div className="form-group">
-            <label>Assign to</label>
-            <div className="radio-group">
-              <label className="radio-label">
-                <input
-                  type="radio"
-                  checked={scope === "team"}
-                  onChange={() => setScope("team")}
-                />
-                Whole Team
-              </label>
+    <Dialog open={true} onClose={onCancel} maxWidth="xs" fullWidth>
+      <DialogTitle>Add Checklist Item</DialogTitle>
+      <DialogContent>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
+          <TextField
+            label="Item Description"
+            value={label}
+            onChange={(e) => setLabel(e.target.value)}
+            placeholder="e.g. Extra protein bars"
+            fullWidth
+            autoFocus
+            error={!!error}
+            helperText={error}
+          />
+          <FormControl>
+            <FormLabel>Assign to</FormLabel>
+            <RadioGroup
+              row
+              value={scope}
+              onChange={(e) => setScope(e.target.value)}
+            >
+              <FormControlLabel value="team" control={<Radio />} label="Whole Team" />
               {members.length > 0 && (
-                <label className="radio-label">
-                  <input
-                    type="radio"
-                    checked={scope === "person"}
-                    onChange={() => setScope("person")}
-                  />
-                  Specific Person
-                </label>
+                <FormControlLabel value="person" control={<Radio />} label="Specific Person" />
               )}
-            </div>
-          </div>
+            </RadioGroup>
+          </FormControl>
           {scope === "person" && members.length > 0 && (
-            <div className="form-group">
-              <label>Person</label>
-              <select
+            <FormControl fullWidth>
+              <InputLabel>Person</InputLabel>
+              <Select
                 value={assignedTo}
+                label="Person"
                 onChange={(e) => setAssignedTo(e.target.value)}
               >
                 {members.map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.name}
-                  </option>
+                  <MenuItem key={m.id} value={m.id}>{m.name}</MenuItem>
                 ))}
-              </select>
-            </div>
+              </Select>
+            </FormControl>
           )}
-          <div className="form-actions">
-            <button type="button" className="btn btn-secondary" onClick={onCancel}>
-              Cancel
-            </button>
-            <button type="submit" className="btn btn-primary">
-              Add Item
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        </Box>
+      </DialogContent>
+      <DialogActions sx={{ px: 3, pb: 2 }}>
+        <Button variant="outlined" onClick={onCancel}>Cancel</Button>
+        <Button variant="contained" onClick={handleSubmit}>Add Item</Button>
+      </DialogActions>
+    </Dialog>
   );
 }
