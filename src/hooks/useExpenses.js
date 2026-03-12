@@ -7,7 +7,7 @@ export function useExpenses(members) {
   const addExpense = (data) => {
     setExpenses((prev) => [
       ...prev,
-      { ...data, id: crypto.randomUUID(), createdAt: Date.now() },
+      { ...data, id: crypto.randomUUID(), createdAt: Date.now(), settled: false },
     ]);
   };
 
@@ -15,9 +15,15 @@ export function useExpenses(members) {
     setExpenses((prev) => prev.filter((e) => e.id !== id));
   };
 
-  const { balances, settlements } = computeSettlement(expenses, members);
+  const toggleSettled = (id) => {
+    setExpenses((prev) =>
+      prev.map((e) => (e.id === id ? { ...e, settled: !e.settled } : e))
+    );
+  };
 
-  const totalSpent = expenses.reduce((sum, e) => sum + e.amount, 0);
+  const active = expenses.filter((e) => !(e.settled ?? false));
+  const { balances, settlements } = computeSettlement(active, members);
+  const totalSpent = active.reduce((sum, e) => sum + e.amount, 0);
 
-  return { expenses, addExpense, removeExpense, balances, settlements, totalSpent };
+  return { expenses, addExpense, removeExpense, toggleSettled, balances, settlements, totalSpent };
 }

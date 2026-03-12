@@ -1,4 +1,15 @@
 import { useState } from "react";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
 
 const EMPTY = { name: "", role: "runner" };
 
@@ -16,54 +27,38 @@ export default function MemberForm({ initial, onSubmit, onCancel }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onCancel}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h2>{initial ? "Edit Member" : "Add Member"}</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Name</label>
-            <input
-              type="text"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="e.g. Ana Torres"
-              autoFocus
-            />
-            {error && <span className="form-error">{error}</span>}
-          </div>
-          <div className="form-group">
-            <label>Role</label>
-            <div className="radio-group">
-              <label className="radio-label">
-                <input
-                  type="radio"
-                  value="runner"
-                  checked={form.role === "runner"}
-                  onChange={() => setForm({ ...form, role: "runner" })}
-                />
-                🏃 Runner
-              </label>
-              <label className="radio-label">
-                <input
-                  type="radio"
-                  value="driver"
-                  checked={form.role === "driver"}
-                  onChange={() => setForm({ ...form, role: "driver" })}
-                />
-                🚗 Driver
-              </label>
-            </div>
-          </div>
-          <div className="form-actions">
-            <button type="button" className="btn btn-secondary" onClick={onCancel}>
-              Cancel
-            </button>
-            <button type="submit" className="btn btn-primary">
-              {initial ? "Save Changes" : "Add Member"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <Dialog open={true} onClose={onCancel} maxWidth="xs" fullWidth>
+      <DialogTitle>{initial ? "Edit Member" : "Add Member"}</DialogTitle>
+      <DialogContent>
+        <TextField
+          label="Name"
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+          placeholder="e.g. Ana Torres"
+          fullWidth
+          autoFocus
+          error={!!error}
+          helperText={error}
+          sx={{ mt: 1 }}
+        />
+        <FormControl sx={{ mt: 2 }}>
+          <FormLabel>Role</FormLabel>
+          <RadioGroup
+            row
+            value={form.role}
+            onChange={(e) => setForm({ ...form, role: e.target.value })}
+          >
+            <FormControlLabel value="runner" control={<Radio />} label="Runner" />
+            <FormControlLabel value="driver" control={<Radio />} label="Driver" />
+          </RadioGroup>
+        </FormControl>
+      </DialogContent>
+      <DialogActions sx={{ px: 3, pb: 2 }}>
+        <Button variant="outlined" onClick={onCancel}>Cancel</Button>
+        <Button variant="contained" onClick={handleSubmit}>
+          {initial ? "Save Changes" : "Add Member"}
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
