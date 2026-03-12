@@ -15,7 +15,7 @@ export default function Header({ onLogout }) {
           component="img"
           src={logo}
           alt="Underdog Runners"
-          sx={{ height: 36, filter: "brightness(0) invert(1)", flexShrink: 0 }}
+          sx={{ height: 36, filter: "invert(1)", flexShrink: 0 }}
         />
 
         {/* Blue accent bar */}
