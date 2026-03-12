@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
+import logo from "../../assets/logo.png";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -87,9 +88,8 @@ export default function AuthGate({
         <Box sx={{ position: "relative", textAlign: "center" }}>
           <Box
             component="img"
-            src="/src/assets/logo.png"
+            src={logo}
             alt="Underdog Runners"
-            onError={(e) => { e.target.style.display = "none"; }}
             sx={{ height: { xs: 80, md: 120 }, display: "block", mx: "auto", mb: 3 }}
           />
           <Typography

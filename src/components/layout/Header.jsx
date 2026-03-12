@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import LockIcon from "@mui/icons-material/Lock";
+import logo from "../../assets/logo.png";
 
 export default function Header({ onLogout }) {
   return (
@@ -12,9 +13,8 @@ export default function Header({ onLogout }) {
       <Toolbar sx={{ gap: 2, minHeight: { xs: 56, sm: 64 } }}>
         <Box
           component="img"
-          src="/src/assets/logo.png"
+          src={logo}
           alt="Underdog Runners"
-          onError={(e) => { e.target.style.display = "none"; }}
           sx={{ height: 36, filter: "brightness(0) invert(1)", flexShrink: 0 }}
         />
 
